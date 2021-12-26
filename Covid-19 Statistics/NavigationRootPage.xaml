@@ -1,0 +1,87 @@
+﻿<Page
+    x:Class="Covid_19_Statistics.NavigationRootPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Covid_19_Statistics"
+    xmlns:views="using:Covid_19_Statistics.Views"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
+    >
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <ResourceDictionary.ThemeDictionaries>
+                        <ResourceDictionary x:Key="Light">
+                            <StaticResource x:Key="NavigationViewContentBackground" ResourceKey="LayerFillColorDefaultBrush"/>
+                            <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="Dark">
+                            <StaticResource x:Key="NavigationViewContentBackground" ResourceKey="LayerFillColorDefaultBrush"/>
+                            <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="HighContrast">
+                            <SolidColorBrush x:Key="NavigationViewContentBackground" Color="{ThemeResource SystemColorWindowColor}" />
+                            <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="{ThemeResource SystemColorWindowColor}" />
+                        </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
+                </ResourceDictionary>
+                <!--<ResourceDictionary>
+                    <DataTemplate x:Key="NavigationViewHeaderTemplate">
+                        <local:PageHeader
+                            Title="{Binding}"
+                            Background="Transparent"
+                            BackgroundColorOpacity="1" />
+                    </DataTemplate>
+                </ResourceDictionary>-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Rectangle
+            x:Name="XboxContentSafeRect"
+            Width="48"
+            Fill="{ThemeResource NavigationViewDefaultPaneBackground}"
+            Visibility="Collapsed" Canvas.ZIndex="0" />
+        
+        <Border x:Name="AppTitleBar"
+                Grid.Column="1"
+                IsHitTestVisible="True"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
+                Canvas.ZIndex="1">
+            <TextBlock x:Name="AppTitle"
+                       Text="Covid-19 Statistics"
+                       VerticalAlignment="Center"
+                       Margin="50,15,0,0"
+                       Style="{StaticResource CaptionTextBlockStyle}" />
+            <!--Text="{x:Bind GetAppTitleFromSystem()}"-->
+        </Border>
+        <muxc:NavigationView x:Name="nvSample"
+                             Canvas.ZIndex="0"
+                             Grid.Column="1"
+                             AlwaysShowHeader="True"
+                             IsTabStop="False"
+                             IsTitleBarAutoPaddingEnabled="False"
+                             OpenPaneLength="225"
+                             ItemInvoked="OnNavigationViewItemInvoked">
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Icon="Globe" Content="概览" Tag="home"/>
+                <muxc:NavigationViewItem Icon="List" Content="地区" Tag="area" />
+                <muxc:NavigationViewItemSeparator></muxc:NavigationViewItemSeparator>
+                <muxc:NavigationViewItem Icon="Map" Content="中国" Tag="SamplePage3" />
+            </muxc:NavigationView.MenuItems>
+            <muxc:NavigationView.FooterMenuItems>
+                <muxc:NavigationViewItem Icon="Help" Content="关于" Tag="SamplePage3" />
+            </muxc:NavigationView.FooterMenuItems>
+            <!--<Frame x:Name="contentFrame"/>-->
+            <Frame x:Name="rootFrame"></Frame>
+        </muxc:NavigationView>
+    </Grid>
+</Page>

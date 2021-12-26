@@ -1,0 +1,238 @@
+﻿<Page
+    x:Class="Covid_19_Statistics.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Covid_19_Statistics.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" xmlns:maps="using:Windows.UI.Xaml.Controls.Maps" xmlns:xaml="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="RowDetailsTemplate">
+                <StackPanel>
+                    <TextBlock Margin="20" Text="Here are the details for the selected mountain:" />
+                    <Grid Margin="20,10" Padding="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Coordinates: " FontWeight="SemiBold" FontSize="13" />
+                        <TextBlock Grid.Row="1" Text="Prominence (m): " FontWeight="SemiBold" FontSize="13" />
+                        <TextBlock Grid.Row="2" Text="First Ascent (year): " FontWeight="SemiBold" FontSize="13" />
+                        <TextBlock Grid.Row="3" Text="No. of ascents: " FontWeight="SemiBold" FontSize="13" />
+                        <!--<TextBlock Grid.Column="1" FontSize="13" Text="{Binding Coordinates}" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Text="{Binding Prominence}" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Text="{Binding First_ascent}" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Text="{Binding Ascents}" HorizontalAlignment="Right" />-->
+                    </Grid>
+                </StackPanel>
+            </DataTemplate>
+            <CommandBarFlyout Placement="Bottom" x:Name="CommandBarFlyout1">
+                <AppBarButton x:Name="ShareButton1" Label="分享" Icon="Share"/>
+                <AppBarButton x:Name="FavorButton1" Label="收藏" Icon="UnFavorite" />
+                <AppBarButton x:Name="DeleteButton1" Label="关闭" Icon="Cancel"/>
+                <CommandBarFlyout.SecondaryCommands>
+                    <AppBarButton x:Name="ResizeButton1" Label="查看详情" Icon="NewWindow"/>
+                    <AppBarSeparator></AppBarSeparator>
+                    <AppBarElementContainer>
+                        <StackPanel>
+                            <Grid Width="300" Height="250" Margin="0,0,0,0" Padding="0,0,0,0">
+                                <TextBlock Text="上海" Margin="10,20,0,0"
+                                       FontSize="20" FontWeight="Bold"></TextBlock>
+                                <Image Source="ms-appx:///Assets/Maps/China/上海.svg" Stretch="Uniform"></Image>
+                            </Grid>
+                            <Grid Background="#11FF0000"
+                                  Margin="20,0,20,5"
+                                  Padding="10"
+                                  CornerRadius="10">
+                                <TextBlock Text="现有确诊"  Margin="0" 
+                                           VerticalAlignment="Center"
+                                   FontSize="20"></TextBlock>
+                                <TextBlock Text="0"
+                                   FontSize="20"
+                                   Margin="0"
+                                   
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"></TextBlock>
+                            </Grid>
+                            <Grid Background="#11FF00F5"
+                                  Margin="20,0,20,10"
+                                  Padding="10"
+                                  CornerRadius="10">
+                                <TextBlock Text="无症状感染者"  Margin="0" 
+                                           VerticalAlignment="Center"
+                                   FontSize="20"></TextBlock>
+                                <TextBlock Text="0"
+                                   FontSize="20"
+                                   Margin="0"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"></TextBlock>
+                            </Grid>
+                        </StackPanel>
+                    </AppBarElementContainer>
+                    <AppBarSeparator></AppBarSeparator>
+                    <AppBarButton x:Name="MoveButton1" Label="查找地区" Icon="Find"/>
+                    <!--<AppBarButton x:Name="MuteButton" Label="对此标签页静音" Icon="Mute" Click="OnElementClicked" />-->
+                    <AppBarButton x:Name="CopyButton" Label="复制疫情数据" Icon="Copy"/>      
+
+                </CommandBarFlyout.SecondaryCommands>
+            </CommandBarFlyout>
+        </Grid.Resources>
+        <Grid Margin="0,0,0,0" VerticalAlignment="Top" MinHeight="500">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
+                    <GradientStop Color="#11000000" Offset="1"></GradientStop>
+                    <GradientStop Color="Transparent" Offset="0"></GradientStop>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid Width="500" Height="500">
+                <xaml:CanvasAnimatedControl x:Name="Canvas" 
+                                            Background="Black"
+                                            Draw="Canvas_Draw"
+                                            CreateResources="Canvas_CreateResources"
+                                            >
+                    
+                </xaml:CanvasAnimatedControl>
+                <!--<xaml:CanvasControl
+                                ></xaml:CanvasControl>-->
+            </Grid>
+            <Image x:Name="HomeMap" Source="ms-appx:///Assets/Maps/China/中国.svg" Height="600" Margin="0,70,0,0"
+                   Visibility="Collapsed"></Image>
+            <TextBlock Text="概览" FontWeight="Bold" FontSize="30" HorizontalAlignment="Left" Margin="30"></TextBlock>
+            <TextBlock Text="中国" FontWeight="Bold" FontSize="38" HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" Margin="0,50,0,20"></TextBlock>
+
+            <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" Margin="0,140,0,20">
+                <SymbolIcon Symbol="Find" Foreground="#FF666666"/>
+                <TextBlock Text="查看详细" Foreground="#FF666666" FontWeight="Bold" FontSize="16"
+                                   Margin="10,0,0,0"></TextBlock>
+            </StackPanel>
+            <TextBlock Text="数据更新时间：3小时前" HorizontalAlignment="Right" Margin="0,30,20,20"></TextBlock>
+        </Grid>
+        <Grid Margin="10" VerticalAlignment="Bottom">
+            <controls:AdaptiveGridView StretchContentForSingleRow="False"
+                                       MaxWidth="1000"
+                                       OneRowModeEnabled="False"
+                                       ItemHeight="100"
+                                       DesiredWidth="200"
+                                       SelectionMode="None"
+                                       IsItemClickEnabled="False"
+                                       Margin="0,0,0,0">
+                <Grid Background="#AAFFFFFF"
+                      Margin="0,0,0,0"
+                      Padding="12"
+                      CornerRadius="10"
+                      >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="本土现有确诊" FontWeight="Bold" Margin="0" 
+                                   FontSize="20"></TextBlock>
+                        <!--<SymbolIcon Symbol="Help" Foreground="#FF666666">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Content="“本土现有确诊”为31省本土正在治疗中的确诊人数。（不含港澳台、不含境外输入）" VerticalOffset="0"/>
+                            </ToolTipService.ToolTip>
+                        </SymbolIcon>-->
+                    </StackPanel>
+                    <TextBlock Text="1202" FontWeight="Bold"
+                                   FontSize="40"
+                                   Margin="0"
+                                   Foreground="DarkRed"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+                <Grid Background="#AAFFFFFF"
+                          Margin="0,0,0,0"
+                          Padding="12"
+                          CornerRadius="10"
+                          >
+                    <TextBlock Text="现有确诊" FontWeight="Bold" Margin="0" 
+                                   FontSize="20"></TextBlock>
+                    <TextBlock Text="4265" FontWeight="Bold"
+                                   FontSize="40"
+                                   Margin="0"
+                                   Foreground="Red"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+                <Grid Background="#AAFFFFFF"
+                          Margin="0,0,0,0"
+                          Padding="12"
+                          CornerRadius="10"
+                          >
+                    <TextBlock Text="累计确诊" FontWeight="Bold" Margin="0" 
+                                   FontSize="20"></TextBlock>
+                    <TextBlock Text="130152" FontWeight="Bold"
+                                   FontSize="40"
+                                   Margin="0"
+                                   Foreground="DarkRed"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+                <Grid Background="#AAFFFFFF"
+                          Margin="0,0,0,0"
+                          Padding="12"
+                          CornerRadius="10"
+                          >
+                    <TextBlock Text="无症状感染者" FontWeight="Bold" Margin="0" 
+                                       FontSize="20"></TextBlock>
+                    <TextBlock Text="496" FontWeight="Bold"
+                                   FontSize="40"
+                                   Margin="0"
+                                   Foreground="Purple"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+                <Grid Background="#AAFFFFFF"
+                              Margin="0,0,0,0"
+                              Padding="12"
+                              CornerRadius="10"
+                          >
+                    <TextBlock Text="境外输入" FontWeight="Bold" Margin="0" 
+                                   FontSize="20"></TextBlock>
+                    <TextBlock Text="10761" FontWeight="Bold"
+                                   FontSize="40"
+                                   Margin="0"
+                                   Foreground="CornflowerBlue"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+                <Grid Background="#AAFFFFFF"
+                              Margin="0,0,0,0"
+                              Padding="12"
+                              CornerRadius="10">
+                    <TextBlock Text="累计死亡" FontWeight="Bold" Margin="0" 
+                                   FontSize="20"></TextBlock>
+                    <TextBlock Text="5699" FontWeight="Bold"
+                                   FontSize="40"
+                                   Margin="0"
+                                   Foreground="#FF555555"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+                <Grid Background="#AAFFFFFF"
+                              Margin="0,0,0,0"
+                              Padding="12"
+                              CornerRadius="10" >
+                    <TextBlock Text="累计治愈" FontWeight="Bold" Margin="0" 
+                                   FontSize="20"></TextBlock>
+                    <TextBlock Text="120188" FontWeight="Bold"
+                                   FontSize="40"
+                                   Margin="0"
+                                   Foreground="Green"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+            </controls:AdaptiveGridView>
+        </Grid>
+    </Grid>
+</Page>
