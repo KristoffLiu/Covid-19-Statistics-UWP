@@ -95,7 +95,7 @@ namespace Covid_19_Statistics.Models
                 {
                     return new CovidDataModel.DailyData()
                     {
-                        confirm = confirm
+                        NumOfConfirmed = confirm
                     };
                 }
             }
@@ -116,15 +116,13 @@ namespace Covid_19_Statistics.Models
                 {
                     return new CovidDataModel.TotalData()
                     {
-                        NowConfirmed = nowConfirm,
-                        Confirmed = confirm,
-                        Suspected = suspect,
-                        Dead = dead,
+                        NumOfConfirmedLeft = nowConfirm,
+                        NumOfConfirmedTotal = confirm,
+                        NumOfSuspected = suspect,
+                        NumOfDead = dead,
                         DeadRate = deadRate,
-                        ShowHeal = showHeal,
-                        Heal = heal,
-                        HealRate = healRate,
-                        ShowRate = showRate,
+                        NumOfCured = heal,
+                        CuredRate = healRate,
                     };
                 }
             }
@@ -151,18 +149,53 @@ namespace Covid_19_Statistics.Models
                 return results;
             }
         }
+        public DailyData ToCountryDailyData()
+        {
+            return new DailyData()
+            {
+                NumOfConfirmed = chinaAdd.confirm,
+                NumOfDead = chinaAdd.dead,
+                NumOfCured = chinaAdd.heal,
+                NumOfImportedCases = chinaAdd.importedCase,
+                NumOfLocalCases = chinaAdd.localConfirm,
+                NumOfAsymptomatic = chinaAdd.noInfect,
+                NumOfComfirmedIncreased = chinaAdd.nowConfirm,
+                NumOfSeverePatients = chinaAdd.nowSevere,
+                NumOfSuspected = chinaAdd.suspect,                
+            };
+        }
+
+        public TotalData ToCountryTotalData()
+        {
+            return new TotalData()
+            {
+                NumOfConfirmedTotal = chinaTotal.confirm,
+                NumOfDead = chinaTotal.dead,
+                DeadRate = areaTree[0].total.deadRate,
+                NumOfCured = areaTree[0].total.heal,
+                CuredRate = areaTree[0].total.healRate,
+                NumOfImportedCase = chinaTotal.importedCase,
+                NumOfLocalConfirmed = chinaTotal.localConfirm,
+                NumOfLocalAccConfirmed = chinaTotal.local_acc_confirm,
+                NumOfAsymptonmatic = chinaTotal.noInfect,
+                NumOfConfirmedLeft = chinaTotal.nowConfirm,
+                NowSevere = chinaTotal.nowSevere,
+                NumOfSuspected = chinaTotal.suspect,
+            };
+        }
 
         public CovidDataModel ToStandardCovidDataModel()
         {
             CovidDataModel result = new CovidDataModel()
             {
+                CountryID = "China",
                 Name = "中国",
-                Areas = ToStandardAreaArray()
+                Areas = areaTree[0].ToStandardAreaArray(),
+                Today = ToCountryDailyData(),
+                All = ToCountryTotalData(),
             };
             return result;
         }
-        
-
 
         public CovidDataModel.Area[] ToStandardAreaArray()
         {

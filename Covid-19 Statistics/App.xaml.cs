@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -33,7 +34,7 @@ namespace Covid_19_Statistics
             this.Suspending += OnSuspending;
             CovidDataService.Init();
             CovidDataService.Sync();
-            VisualMapService.Init();
+            MapService.Init();
         }
 
         /// <summary>
@@ -41,8 +42,9 @@ namespace Covid_19_Statistics
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
+            await InitApp();
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -76,6 +78,11 @@ namespace Covid_19_Statistics
                 Window.Current.Activate();
             }
         }
+
+        public async Task InitApp()
+        {
+            await UIControlService.Instance.GetGroupsAsync();
+        } 
 
         /// <summary>
         /// 导航到特定页失败时调用

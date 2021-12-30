@@ -4,12 +4,247 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Covid_19_Statistics.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:xaml="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xaml="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls1="using:Covid_19_Statistics.Plotlib.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Loaded="Page_Loaded"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
 
     <Grid>
-        <!--<Image Source="ms-appx:///Assets/Maps/China/新疆维吾尔族自治区.svg" Height="500" Margin="0,70,0,0"></Image>-->
-        <xaml:CanvasControl Draw="CanvasControl_Draw"></xaml:CanvasControl>
+        <Grid.Resources>
+
+        </Grid.Resources>
+        <TextBlock x:Name="AreaNameTextBlock" Text="{x:Bind ViewModel.CovidDataViewModel.Name, Mode=OneWay}" FontWeight="Bold" FontSize="30" HorizontalAlignment="Left" Margin="30"></TextBlock>
+        <CommandBar Background="Transparent"
+                        HorizontalAlignment="Right"
+                        Margin="0,25,0,0"
+                        IsOpen="False" DefaultLabelPosition="Right">
+            <AppBarButton Icon="Sort" Label="排序">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="By rating" Tag="rating"/>
+                        <MenuFlyoutItem Text="By match" Tag="match"/>
+                        <MenuFlyoutItem Text="By distance" Tag="distance"/>
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Share" Label="分享"/>
+            <AppBarButton Icon="Refresh" Label="更新"/>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Icon="Setting" Label="Settings">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="I" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+        <ScrollViewer x:Name="WrapScrollParent"
+                          Margin="10,80,10,0">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="400"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="DataGrid"
+                          Grid.Column="0"
+                          Background="White"
+                          CornerRadius="10"
+                          Margin="10" >
+                        <Grid.Shadow>
+                            <ThemeShadow/>
+                        </Grid.Shadow>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                  VerticalAlignment="Top" Margin="20,20,0,0">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF156;"
+                                  ></FontIcon>
+                            <TextBlock Text="数据" Margin="10,0,0,0"></TextBlock>
+                        </StackPanel>
+                        <ScrollViewer HorizontalScrollMode="Enabled"
+                                      HorizontalScrollBarVisibility="Visible"
+                                      Margin="0,40,0,0">
+                            <StackPanel Padding="10" >
+                                <Grid Background="#FFFFF8F8" Height="80" CornerRadius="8">
+                                    <TextBlock HorizontalAlignment="Right"
+                                           VerticalAlignment="Top"
+                                           Margin="0,10,10,0">
+                                        <Run Text="较昨日 +"></Run>
+                                        <Run Text="{x:Bind ViewModel.CovidDataViewModel.Today.NumOfConfirmed, Mode=OneWay}"></Run>
+                                    </TextBlock>
+                                    <TextBlock Text="现存确诊" Margin="10,10,0,0"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"></TextBlock>
+                                    <TextBlock Text="{x:Bind ViewModel.CovidDataViewModel.Total.NumOfConfirmedLeft, Mode=OneWay}"
+                                           FontSize="30"
+                                           HorizontalAlignment="Left"
+                                           Margin="10,0,0,10"
+                                           VerticalAlignment="Bottom"></TextBlock>
+                                </Grid>
+                                <Grid Background="#FFFEF7FF" Height="80" CornerRadius="8" Margin="0,5,0,0">
+                                    <!--<TextBlock HorizontalAlignment="Right"
+                                           VerticalAlignment="Top"
+                                           Margin="0,10,10,0">
+                                        <Run Text="较昨日 +"></Run>
+                                        <Run Text=""></Run>
+                                    </TextBlock>-->
+                                    <TextBlock Text="本土无症状" Margin="10,10,0,0"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"></TextBlock>
+                                    <TextBlock Text="{x:Bind ViewModel.CovidDataViewModel.Total.NumOfAsymptonmatic, Mode=OneWay}"
+                                           FontSize="30"
+                                           HorizontalAlignment="Left"
+                                           Margin="10,0,0,10"
+                                           VerticalAlignment="Bottom"></TextBlock>
+                                </Grid>
+                                <Grid Background="#FFFFF4F4" Height="80" CornerRadius="8" Margin="0,5,0,0">
+                                    <!--<TextBlock HorizontalAlignment="Right"
+                                           VerticalAlignment="Top"
+                                           Margin="0,10,10,0">
+                                        <Run Text="较昨日 +"></Run>
+                                        <Run Text=""></Run>
+                                    </TextBlock>-->
+                                    <TextBlock Text="累计确诊" Margin="10,10,0,0"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"></TextBlock>
+                                    <TextBlock Text="{x:Bind ViewModel.CovidDataViewModel.Total.NumOfConfirmedTotal, Mode=OneWay}"
+                                           FontSize="30"
+                                           HorizontalAlignment="Left"
+                                           Margin="10,0,0,10"
+                                           VerticalAlignment="Bottom"></TextBlock>
+                                </Grid>
+                                <Grid Background="#FFF3F6F8" Height="80" CornerRadius="8" Margin="0,5,0,0">
+                                    <!--<TextBlock HorizontalAlignment="Right"
+                                           VerticalAlignment="Top"
+                                           Margin="0,10,10,0">
+                                        <Run Text="较昨日 +"></Run>
+                                        <Run Text=""></Run>
+                                    </TextBlock>-->
+                                    <TextBlock Text="累计死亡" Margin="10,10,0,0"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"></TextBlock>
+                                    <TextBlock Text="{x:Bind ViewModel.CovidDataViewModel.Total.NumOfDead, Mode=OneWay}"
+                                           FontSize="30"
+                                           HorizontalAlignment="Left"
+                                           Margin="10,0,0,10"
+                                           VerticalAlignment="Bottom"></TextBlock>
+                                </Grid>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                    <Grid x:Name="VisualizationGrid" Grid.Row="0"
+                          Grid.Column="1" Background="White"
+                          CornerRadius="10" Margin="0,10,10,10">
+                        <Grid.Shadow>
+                            <ThemeShadow/>
+                        </Grid.Shadow>
+                        <AppBarButton Icon="FullScreen" HorizontalAlignment="Right"
+                                      VerticalAlignment="Top"
+                                      Margin="0,10,0,0"></AppBarButton>
+                        <Image x:Name="MapPlotImage" Source="ms-appx:///Assets/Maps/China/中国.svg"></Image>
+                        <Grid Background="White"></Grid>
+                        <controls1:AnimatedMapPlotControl x:Name="AnimatedMapPlotControl"
+                                                          Visibility="Collapsed"
+                                                      ></controls1:AnimatedMapPlotControl>
+                        <xaml:CanvasAnimatedControl x:Name="AreaMapControl" Margin="15,15,0,0"
+                                                    Draw="CanvasAnimatedControl_Draw"
+                                                    CreateResources="CanvasAnimatedControl_CreateResources"
+                                                    Visibility="Visible"></xaml:CanvasAnimatedControl>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                  VerticalAlignment="Top" Margin="20,20,0,0">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE9D2;"
+                                  ></FontIcon>
+                            <TextBlock Text="图表" Margin="10,0,0,0"></TextBlock>
+                        </StackPanel>
+                        <Grid x:Name="ScaleGrid"
+                              CornerRadius="5"
+                              Background="#ffFFFFFF" VerticalAlignment="Bottom"
+                              HorizontalAlignment="Left"
+                              Margin="20,20,20,20" Padding="10,10,10,5">
+                            <Grid.Shadow>
+                                <ThemeShadow></ThemeShadow>
+                            </Grid.Shadow>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            CornerRadius="5">
+                                    <Grid Background="#FFE2EBF4" Width="45" Height="15"></Grid>
+                                    <Grid Background="#FFFFE7B8" Width="45" Height="15"></Grid>
+                                    <Grid Background="#FFFFDAB3" Width="45" Height="15"></Grid>
+                                    <Grid Background="#FFFFC89E" Width="45" Height="15"></Grid>
+                                    <Grid Background="#FFFFAA80" Width="45" Height="15"></Grid>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="0" Width="45"></TextBlock>
+                                    <TextBlock Text="10" Width="45"></TextBlock>
+                                    <TextBlock Text="50" Width="45"></TextBlock>
+                                    <TextBlock Text="100" Width="45"></TextBlock>
+                                    <TextBlock Text="500" Width="45"></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid>
+                </Grid>
+                <Grid x:Name="AreaDetailsGrid"
+                      Background="White"
+                      Margin="10,10,10,20"
+                      CornerRadius="10"
+                      Padding="0,20,0,0">
+                    <Grid.Shadow>
+                        <ThemeShadow/>
+                    </Grid.Shadow>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                  VerticalAlignment="Top" Margin="20,0,0,0">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7B8;"
+                                  ></FontIcon>
+                        <TextBlock Text="地区疫情" Margin="10,0,0,0"></TextBlock>
+                    </StackPanel>
+                    <controls:DataGrid Grid.Row="1"
+                                   x:Name="dataGrid"
+                                   Margin="12,40,12,0"
+                                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                   HorizontalScrollBarVisibility="Visible"
+                                   VerticalScrollBarVisibility="Visible"
+                                   AlternatingRowBackground="Transparent"
+                                   AlternatingRowForeground="Gray"
+                                   AreRowDetailsFrozen="False"
+                                   AreRowGroupHeadersFrozen="True"
+                                   AutoGenerateColumns="False"
+                                   CanUserSortColumns="False"
+                                   CanUserReorderColumns="True"
+                                   CanUserResizeColumns="True"
+                                   ColumnHeaderHeight="32"
+                                   MaxColumnWidth="400"
+                                   FrozenColumnCount="0"
+                                   GridLinesVisibility="None"
+                                   HeadersVisibility="Column"
+                                   IsReadOnly="False"
+                                   RowDetailsVisibilityMode="Collapsed"
+                                   SelectionMode="Extended"
+                                   RowGroupHeaderPropertyNameAlternative="Range"
+                                   ItemsSource="{x:Bind ViewModel.SubAreaList, Mode=OneWay}">
+                        <controls:DataGrid.Columns>
+                            <controls:DataGridTextColumn Header="地区" Binding="{Binding Name}" Tag="Rank" />
+                            <controls:DataGridTextColumn Header="新增确诊" Binding="{Binding Today.NumOfConfirmed}" Tag="Mountain" />
+                            <controls:DataGridTextColumn Header="现存确诊" Binding="{Binding Total.NumOfConfirmedLeft}" Tag="Height_m" />
+                            <controls:DataGridTextColumn Header="累计确诊" Binding="{Binding Total.NumOfConfirmedTotal}" Tag="Height_m" />
+                            <controls:DataGridTextColumn Header="治愈" Binding="{Binding Total.NumOfCured}" Tag="Range" />
+                            <controls:DataGridTextColumn Header="死亡" Binding="{Binding Total.NumOfDead}" Tag="Parent_mountain" />
+                            <controls:DataGridTextColumn Header="无症状感染" Binding="{Binding Total.NumOfAsymptonmatic}" Tag="Parent_mountain" />
+                            <controls:DataGridTextColumn Header="境外输入" Binding="{Binding Total.NumOfImportedCases}" Tag="Parent_mountain" />
+                        </controls:DataGrid.Columns>
+                </controls:DataGrid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+        <Grid></Grid>
+        <Grid Background="White" HorizontalAlignment="Right" VerticalAlignment="Top"></Grid>
     </Grid>
 </Page>

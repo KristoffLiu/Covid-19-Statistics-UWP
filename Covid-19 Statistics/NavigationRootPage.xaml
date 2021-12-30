@@ -55,32 +55,46 @@
                 VerticalAlignment="Top"
                 Background="Transparent"
                 Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
-                Canvas.ZIndex="1">
+                Canvas.ZIndex="1"
+                Margin="50,0,0,0">
             <TextBlock x:Name="AppTitle"
-                       Text="Covid-19 Statistics"
+                       Text="追疫"
                        VerticalAlignment="Center"
-                       Margin="50,15,0,0"
-                       Style="{StaticResource CaptionTextBlockStyle}" />
+                       Style="{StaticResource CaptionTextBlockStyle}">
+            </TextBlock>
+            <!--Covid-19 Statistics-->
             <!--Text="{x:Bind GetAppTitleFromSystem()}"-->
         </Border>
-        <muxc:NavigationView x:Name="nvSample"
+        <muxc:NavigationView x:Name="NavigationViewControl"
                              Canvas.ZIndex="0"
                              Grid.Column="1"
                              AlwaysShowHeader="True"
                              IsTabStop="False"
                              IsTitleBarAutoPaddingEnabled="False"
                              OpenPaneLength="225"
-                             ItemInvoked="OnNavigationViewItemInvoked">
-            <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Icon="Globe" Content="概览" Tag="home"/>
-                <muxc:NavigationViewItem Icon="List" Content="地区" Tag="area" />
-                <muxc:NavigationViewItemSeparator></muxc:NavigationViewItemSeparator>
-                <muxc:NavigationViewItem Icon="Map" Content="中国" Tag="SamplePage3" />
-            </muxc:NavigationView.MenuItems>
+                             DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
+                             ItemInvoked="OnNavigationViewItemInvoked"
+                             PaneOpening="NavigationViewControl_PaneOpening"
+                             PaneOpened="NavigationViewControl_PaneOpened"
+                             PaneClosing="NavigationViewControl_PaneClosing">
             <muxc:NavigationView.FooterMenuItems>
-                <muxc:NavigationViewItem Icon="Help" Content="关于" Tag="SamplePage3" />
+                <muxc:NavigationViewItem Icon="Help" Content="关于"/>
             </muxc:NavigationView.FooterMenuItems>
-            <!--<Frame x:Name="contentFrame"/>-->
+            <!--<muxc:NavigationView.AutoSuggestBox>
+                <AutoSuggestBox
+                    x:Name="controlsSearchBox"
+                    VerticalAlignment="Center"
+                    x:FieldModifier="public"
+                    PlaceholderText="搜索"
+                    QueryIcon="Find"
+                    QuerySubmitted="OnControlsSearchBoxQuerySubmitted"
+                    KeyboardAcceleratorPlacementMode="Hidden"
+                    TextChanged="OnControlsSearchBoxTextChanged">
+                    <AutoSuggestBox.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="F" Invoked="CtrlF_Invoked" />
+                    </AutoSuggestBox.KeyboardAccelerators>
+                </AutoSuggestBox>
+            </muxc:NavigationView.AutoSuggestBox>-->
             <Frame x:Name="rootFrame"></Frame>
         </muxc:NavigationView>
     </Grid>

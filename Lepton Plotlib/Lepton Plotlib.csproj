@@ -4,15 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FE38DF6A-0619-4199-ADEB-BD3EF0E07297}</ProjectGuid>
+    <ProjectGuid>{1888C642-89CB-4103-98E9-E9D4FD3D24F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lepton_Library</RootNamespace>
-    <AssemblyName>Lepton Library</AssemblyName>
+    <RootNamespace>Lepton_Plotlib</RootNamespace>
+    <AssemblyName>Lepton Plotlib</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.22000.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.22000.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -119,82 +119,53 @@
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
-  <PropertyGroup Label="MultilingualAppToolkit">
-    <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
-    <MultilingualFallbackLanguage>zh-CN</MultilingualFallbackLanguage>
-    <TranslationReport Condition="'$(Configuration)' == 'Release'">true</TranslationReport>
-    <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
-  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Common\DelegateCommand.cs" />
-    <Compile Include="Common\Observable.cs" />
-    <Compile Include="Common\ViewModelBase.cs" />
-    <Compile Include="Helper\ByteHelper.cs" />
-    <Compile Include="Helper\ColourHelper.cs" />
-    <Compile Include="Helper\EncryptionHelper.cs" />
-    <Compile Include="Helper\EnumHelper.cs" />
-    <Compile Include="Helper\GuidHelper.cs" />
-    <Compile Include="Helper\ImageHelper.cs" />
-    <Compile Include="Helper\Language.cs" />
-    <Compile Include="Helper\LanguageHelper.cs" />
-    <Compile Include="Helper\ListHelper.cs" />
-    <Compile Include="Helper\ObservableCollectionHelper.cs" />
-    <Compile Include="Helper\StringHelper.cs" />
-    <Compile Include="Interaction\SpeechRecognition.cs" />
-    <Compile Include="LeptonLib.cs" />
-    <Compile Include="Native\HandleHelper.cs" />
-    <Compile Include="Native\IMEOperator.cs" />
-    <Compile Include="Network\NetworkConnection.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Controls\AnimatedMapPlotControl.xaml.cs">
+      <DependentUpon>AnimatedMapPlotControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapPlotControl.xaml.cs">
+      <DependentUpon>MapPlotControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlotControl.xaml.cs">
+      <DependentUpon>PlotControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MapModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Storage\AppData.cs" />
-    <Compile Include="Storage\ISQLManager.cs" />
-    <Compile Include="Storage\Json.cs" />
-    <Compile Include="Storage\LocalSetting.cs" />
-    <Compile Include="Storage\SQLiteManagerBase.cs" />
-    <Compile Include="Storage\StorageFile.cs" />
-    <Compile Include="UI\NavigationHelper.cs" />
-    <Compile Include="UI\SuspensionManager.cs" />
-    <EmbeddedResource Include="Properties\Lepton_Common.rd.xml" />
+    <EmbeddedResource Include="Properties\Lepton_Plotlib.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MaterialLibs">
-      <Version>0.1.31</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.8</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Toolkit.Uwp.Connectivity">
-      <Version>5.1.1</Version>
+      <Version>6.2.12</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
-      <Version>5.1.1</Version>
+      <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.7.0</Version>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="SQLite.Net-PCL">
-      <Version>3.1.1</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
-      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
-    </SDKReference>
-    <SDKReference Include="SQLite.UWP.2015, Version=3.37.0">
-      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.37.0%29</Name>
-    </SDKReference>
+    <Page Include="Controls\AnimatedMapPlotControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MapPlotControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PlotControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.PriResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.PriResources.targets')" />
-  <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.PriResources.targets')" Label="MultilingualAppToolkit">
-    <Warning Text="$(MSBuildProjectFile) is Multilingual build enabled, but the Multilingual App Toolkit is unavailable during the build. If building with Visual Studio, please check to ensure that toolkit is properly installed." />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

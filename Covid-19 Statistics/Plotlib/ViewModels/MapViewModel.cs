@@ -14,13 +14,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
-namespace Covid_19_Statistics.ViewModels
+namespace Covid_19_Statistics.Plotlib.ViewModels
 {
     public class MapViewModel : ViewModelBase
     {
         public string name { get; set; }
         public string description { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
         public List<AreaViewModel> areas { get; set; }
         public MapViewModel(MapModel mapModel)
         {
@@ -44,6 +47,7 @@ namespace Covid_19_Statistics.ViewModels
     {
         public bool isPointerEntered { get; set; } = false;
         public bool isPointerPressed { get; set; } = false;
+
         public virtual void Act(CanvasDrawingSession session)
         {
 
@@ -105,7 +109,6 @@ namespace Covid_19_Statistics.ViewModels
             pathsText = model.pathsText;
 
         }
-
         public override void Act(CanvasDrawingSession session)
         {
             geometry = CanvasPathGeometry.CreateGeometry(session, pathsText);
@@ -139,7 +142,6 @@ namespace Covid_19_Statistics.ViewModels
             cy = model.cy;
 
         }
-
         public override void Act(CanvasDrawingSession session)
         {
             geometry = CanvasGeometry.CreateCircle(session, cx, cy, r);
@@ -154,7 +156,6 @@ namespace Covid_19_Statistics.ViewModels
             //session.DrawGeometry(cx, cy, r, StrokeColor, StrokeThickness);
             //session.FillGeometry(cx, cy, r, FillColor);
         }
-
         public override void DrawText(CanvasDrawingSession session)
         {
             Rect bound = geometry.ComputeBounds();

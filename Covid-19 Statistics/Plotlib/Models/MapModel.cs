@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 
-namespace Covid_19_Statistics.Models
+namespace Covid_19_Statistics.Plotlib.Models
 {
     public class MapModel
     {
@@ -68,7 +68,7 @@ namespace Covid_19_Statistics.Models
                         cx = float.Parse(attribute.InnerText);
                         break;
                     case "cy":
-                        cx = float.Parse(attribute.InnerText);
+                        cy = float.Parse(attribute.InnerText);
                         break;
                 }
             }
